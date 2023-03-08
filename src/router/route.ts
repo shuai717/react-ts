@@ -1,6 +1,6 @@
 import {lazy} from 'react'
-// import Login from '../pages/layout/login/index'
 const Login =lazy(()=>import('../pages/layout/login/index'))
+const Home =lazy(()=>import('../pages/home/index'))
 const routes=[
     {
         key:'login',
@@ -9,13 +9,12 @@ const routes=[
         exact:true,
         name:'登录'
     },
-    // {
-    //     path:'/',
-    //     component:Login,
-    // },
-    // {
-    //     path: "*",
-    //     component: Login,
-    // },
+    {
+        key:'home',
+        component:Home,
+        path:'/home',
+        exact:true,
+        name:'首页'
+    },
 ]
 export default routes
