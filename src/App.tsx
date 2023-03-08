@@ -1,15 +1,15 @@
-import React from 'react';
 import routesArr from './router/route'
 import { Suspense } from "react";
-import { BrowserRouter as Router,Routes, Route  ,Navigate,Link} from "react-router-dom";
+import { BrowserRouter as Router,Routes, Route  , Navigate} from "react-router-dom";
+import 'antd/dist/reset.css';
 import './App.css';
 
-function App() {
+
+function App(){
   return (
     <div className="App">
       <Suspense fallback={<>loading ...</>}>
             <Router>
-                <Link to='/login'>login</Link>
                 <Routes>
                     {routesArr.map((item, index) => {
                         return (

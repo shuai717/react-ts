@@ -1,4 +1,7 @@
+import styles from './home.module.less'
 function Home(){
-    return <div>home</div>
+    return <div className={styles.home}>
+        home
+    </div>
 }
 export default Home

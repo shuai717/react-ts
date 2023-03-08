@@ -1,27 +1,54 @@
-import { resolve } from 'path'
+
+const path = require("path");
+const CracoLessPlugin = require("craco-less");
+const { loaderByName } = require("@craco/craco");
 module.exports = {
-    // yarn add -D babel-plugin-import 包先安装
-    babel: {
-      // antd包在craco增量配置中的按需加载配置
-      // plugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: 'css' }]]
-    },
-    // 添加路径别名
-    webpack: {
-      alias: {
-        // 在组件中就可以用@来表示，当前项目到src目录
-        '@': resolve('./src')
+  // yarn add -D babel-plugin-import 包先安装
+  babel: {
+    // antd包在craco增量配置中的按需加载配置
+    // plugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: 'css' }]]
+  },
+  plugins: [
+    {
+      plugin: CracoLessPlugin,
+      options: {
+        modifyLessRule(lessRule, context) {
+          // You have to exclude these file suffixes first,
+          // if you want to modify the less module's suffix
+          lessRule.exclude = /\.m\.less$/
+          return lessRule
+        },
+        modifyLessModuleRule(lessModuleRule, context) {
+          // Configure the file suffix
+          lessModuleRule.test = /\.m\.less$/
+
+          // Configure the generated local ident name.
+          const cssLoader = lessModuleRule.use.find(loaderByName('css-loader'))
+          cssLoader.options.modules = {
+            localIdentName: '[local]_[hash:base64:5]'
+          }
+
+          return lessModuleRule
+        }
       }
-    },
-    devServer: {
-      // 浏览器自动打开关闭
-      open: false,
-      port: 8080,
-      proxy: {
-        // '/api': {
-        //   target: 'http://localhost:3000',
-        //   changeOrigin:true,
-        //   pathRewrite: { '^/api': '' }
-        // }
-      },
     }
+  ],
+  // 添加路径别名
+  webpack: {
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    },
+  },
+  devServer: {
+    // 浏览器自动打开关闭
+    open: true,
+    port: 8080,
+    proxy: {
+      // '/api': {
+      //   target: 'http://localhost:3000',
+      //   changeOrigin:true,
+      //   pathRewrite: { '^/api': '' }
+      // }
+    },
   }
+}
